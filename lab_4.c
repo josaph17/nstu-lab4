@@ -9,12 +9,12 @@ void ConvertToPascal(char S[]);
 void ShiftL(char S[], int pos, int n);
 void ShiftR(char S[], int pos, int n);
 void ShiftR2(char S[], int pos, int n);
-void PlaceStr(char S1[], char ch, int pos);
+void PlaceStr(char S[], char ch, int pos);
 void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "p+=25";
+    char S[N] = "myvar-=25 c";
 	printf("Programm on C: %s\n", S);
 	ConvertToPascal(S);
 	printf("Programm on Pascal: %s\n", S);
@@ -64,6 +64,13 @@ void ConvertToPascal(char S[])
 			ShiftR2(S, i, i+1);
 			return;
 		}
+		else if (S[i] == 45 && S[i + 1] == 61) // -=
+		{
+			ChangeMarks(S, i, i + 1);
+			ShiftR(S, i, i);
+			ShiftR2(S, i, i + 1);
+			return;
+		}
 	}
 	/*return -1;*/		//СПРОСИТЬ
 }
@@ -99,11 +106,11 @@ void ShiftL(char S[], int pos, int n)
 	S[i - n] = S[i];
 }
 
-void PlaceStr(char S1[], char ch, int pos)
+void PlaceStr(char S[], char ch, int pos)
 {
 	int j;
 
-	S1[pos] = ch;
+	S[pos] = ch;
 }
  
 void ChangeMarks(char S[], int pos1, int pos2)
