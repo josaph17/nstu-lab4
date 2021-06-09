@@ -5,16 +5,16 @@
 #define N 30
 
 int Length(char S[]);
-int FindChar(char S[]);
+void ConvertToPascal(char S[]);
 void ShiftR(char S[], int pos, int n);
 void PlaceStr(char S1[], char ch, int pos);
-
 
 int main()
 {
     char S[N] = "a=b";
 	printf("%s\n", S);
-	int res = FindChar(S);
+	ConvertToPascal(S);
+	printf("%s\n", S);
     return 0;
 }
 
@@ -27,7 +27,7 @@ int Length(char S[])
     return i;
 }
 
-int FindChar(char S[])
+void ConvertToPascal(char S[])
 {
 	int i;
 	for (i = 0; S[i] != '\0'; i++)
@@ -36,11 +36,10 @@ int FindChar(char S[])
 		{
 			ShiftR(S, i, 1);
 			PlaceStr(S, 58, i);
-			return printf("%s", S);
+			return ;
 		}
 	}
-
-	return -1;
+	/*return -1;*/		//СПРОСИТЬ
 }
 
 void ShiftR(char S[], int pos, int n)
@@ -57,7 +56,5 @@ void PlaceStr(char S1[], char ch, int pos)
 {
 	int j;
 
-
 	S1[pos] = ch;
-
 }
