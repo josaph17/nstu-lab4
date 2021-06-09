@@ -14,7 +14,7 @@ void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "myvar-=25 c";
+    char S[N] = "a!=24; b!=23; a==k";
 	printf("Programm on C: %s\n", S);
 	ConvertToPascal(S);
 	printf("Programm on Pascal: %s\n", S);
@@ -35,26 +35,26 @@ void ConvertToPascal(char S[])
 	int len = Length(S);
 	int i;
 
-	for (i = 0; S[i] != '\0'; i++)
+	for (i = 0; S[i] != '\0' && i< len; i++)
 	{
 		if (S[i] == 61 && S[i + 1] != 61) // =
 		{
 			ShiftR(S, i, 1);
 			PlaceStr(S, 58, i); // :
-			return ;
+			i++;
 		}
 
 		else if (S[i] == 61 && S[i+1] == 61)  // ==
 		{
 			ShiftL(S, i+1, 1);
-			return;
+			i++;
 		}
 
 		else if (S[i] == 33 && S[i + 1] == 61) // !=
 		{
 			ShiftL(S, i+1, 1);
 			PlaceStr(S, 35, i); // #
-			return;
+			i++;
 		}
 
 		else if (S[i] == 43 && S[i + 1] == 61) // +=
@@ -62,14 +62,14 @@ void ConvertToPascal(char S[])
 			ChangeMarks(S, i, i + 1);
 			ShiftR(S, i, i);
 			ShiftR2(S, i, i+1);
-			return;
+			i++;
 		}
 		else if (S[i] == 45 && S[i + 1] == 61) // -=
 		{
 			ChangeMarks(S, i, i + 1);
 			ShiftR(S, i, i);
 			ShiftR2(S, i, i + 1);
-			return;
+			i++;
 		}
 	}
 	/*return -1;*/		//СПРОСИТЬ
