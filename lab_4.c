@@ -2,22 +2,27 @@
 языка Паскаль(:=, =, #, a = a + , a = a - )*/
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#define N 30
+#define N 100
 
 int Length(char S[]);
+int Length2(char S[], char pos);
 void ConvertToPascal(char S[]);
 void ShiftL(char S[], int pos, int n);
 void ShiftR(char S[], int pos, int n);
 void ShiftR2(char S[], int pos, int n);
+void ShiftR3(char S[], int pos, int n);
+void ShiftR4(char S[], int pos, int n);
 void PlaceStr(char S[], char ch, int pos);
 void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "a==b; c!=d; s==s, ffsdds!=csd";
-	printf("Programm on C: %s\n", S);
+    char S[N] = "vars+=54354";
+	printf("Programm on C:\n");
+	printf("%s\n", S);
 	ConvertToPascal(S);
-	printf("Programm on Pascal: %s\n", S);
+	//printf("Programm on Pascal:\n");
+	//printf("%s\n", S);
     return 0;
 }
 
@@ -59,17 +64,15 @@ void ConvertToPascal(char S[])
 		else if (S[i] == 43 && S[i + 1] == 61) // +=
 		{
 			ChangeMarks(S, i, i + 1);
-			printf("%s\n", S);
-			ShiftR(S, i, i);
-			printf("%s\n", S);
-			ShiftR2(S, i, i+1);
-			i + i;
+			printf("ChangeMarks %s\n", S);
+		/*	ShiftR3(S, i+1, i);
+			printf("ShiftR3 %s\n", S);*/
+			ShiftR4(S, i+1, i);
+			printf("ShiftR4 %s\n", S);
 		}
 		else if (S[i] == 45 && S[i + 1] == 61) // -=
 		{
 			ChangeMarks(S, i, i + 1);
-			ShiftR(S, i, i);
-			ShiftR2(S, i, i + 1);
 			i + i;
 		}
 	}
@@ -88,12 +91,45 @@ void ShiftR(char S[], int pos, int n)
 
 void ShiftR2(char S[], int pos, int n)
 {
-	int p = pos-1;
+	int p = pos - 1;
 
 	for (; p >= 0; p--)
 	{
 		S[p + n] = S[p];
 	}
+}
+
+void ShiftR3(char S[], int pos, int n) /*ShiftR3(S,i=5="+", i)*/
+{
+	int p = pos+n-1;
+
+	for (p; p >=pos; p--)
+	{
+		S[p + n] = S[p];
+	}
+}
+
+void ShiftR4(char S[], int pos, int n) /*ShiftR3(S,i=4="s", i=5)*/
+{
+	int len2 = Length2(S, pos); //6, 2-ой операнд и "+"
+	int p = len2 + pos-1 ;
+	int delta = p - len2;
+
+	for (; p >= pos; p--)
+	{
+		S[p + delta] = S[p];
+	}
+}
+
+int Length2(char S[], int pos)
+{
+	int i=pos;
+
+	for (; S[i] != '\0' && S[i] != 32; i++);
+
+	int p = i - pos;
+
+	return p;
 }
 
 void ShiftL(char S[], int pos, int n)
