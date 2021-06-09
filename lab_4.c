@@ -7,13 +7,14 @@
 int Length(char S[]);
 int FindChar(char S[]);
 void ShiftR(char S[], int pos, int n);
+void PlaceStr(char S1[], char ch, int pos);
 
 
 int main()
 {
     char S[N] = "a=b";
-    char C[] = "=!+-=====";
-    int res = FindChar(S);
+	printf("%s\n", S);
+	int res = FindChar(S);
     return 0;
 }
 
@@ -34,6 +35,7 @@ int FindChar(char S[])
 		if (S[i] == 61) //код символа =
 		{
 			ShiftR(S, i, 1);
+			PlaceStr(S, 58, i);
 			return printf("%s", S);
 		}
 	}
@@ -49,4 +51,13 @@ void ShiftR(char S[], int pos, int n)
 	{
 		S[i + n] = S[i];
 	}
+}
+
+void PlaceStr(char S1[], char ch, int pos)
+{
+	int j;
+
+
+	S1[pos] = ch;
+
 }
