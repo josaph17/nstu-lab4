@@ -14,7 +14,7 @@ void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "a!=24; b!=23; a==k";
+    char S[N] = "a==b; c!=d; s==s, ffsdds!=csd";
 	printf("Programm on C: %s\n", S);
 	ConvertToPascal(S);
 	printf("Programm on Pascal: %s\n", S);
@@ -40,36 +40,37 @@ void ConvertToPascal(char S[])
 		if (S[i] == 61 && S[i + 1] != 61) // =
 		{
 			ShiftR(S, i, 1);
-			PlaceStr(S, 58, i); // :
+			PlaceStr(S, 58, i); // :=
 			i++;
 		}
 
 		else if (S[i] == 61 && S[i+1] == 61)  // ==
 		{
-			ShiftL(S, i+1, 1);
-			i++;
+			ShiftL(S, i+1, 1); //=
 		}
 
 		else if (S[i] == 33 && S[i + 1] == 61) // !=
 		{
 			ShiftL(S, i+1, 1);
-			PlaceStr(S, 35, i); // #
-			i++;
+			PlaceStr(S, 35, i); // #	
+			i--;
 		}
 
 		else if (S[i] == 43 && S[i + 1] == 61) // +=
 		{
 			ChangeMarks(S, i, i + 1);
+			printf("%s\n", S);
 			ShiftR(S, i, i);
+			printf("%s\n", S);
 			ShiftR2(S, i, i+1);
-			i++;
+			i + i;
 		}
 		else if (S[i] == 45 && S[i + 1] == 61) // -=
 		{
 			ChangeMarks(S, i, i + 1);
 			ShiftR(S, i, i);
 			ShiftR2(S, i, i + 1);
-			i++;
+			i + i;
 		}
 	}
 	/*return -1;*/		//СПРОСИТЬ
