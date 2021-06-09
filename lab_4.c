@@ -6,6 +6,7 @@
 
 int Length(char S[]);
 void ConvertToPascal(char S[]);
+void ShiftL(char S[], int pos, int n);
 void ShiftR(char S[], int pos, int n);
 void PlaceStr(char S1[], char ch, int pos);
 
@@ -32,14 +33,19 @@ void ConvertToPascal(char S[])
 	int i;
 	for (i = 0; S[i] != '\0'; i++)
 	{
-		if (S[i] == 61) //код символа =
+		if (S[i] == 61 && S[i + 1] != 61) //код символа =
 		{
 			ShiftR(S, i, 1);
 			PlaceStr(S, 58, i);
 			return ;
 		}
+
+		else if (S[i] == 61 && S[i+1] == 61) //код символа =
+		{
+			ShiftL(S, i+1, 1);
+			return;
+		}
 	}
-	/*return -1;*/		//СПРОСИТЬ
 }
 
 void ShiftR(char S[], int pos, int n)
@@ -50,6 +56,17 @@ void ShiftR(char S[], int pos, int n)
 	{
 		S[i + n] = S[i];
 	}
+}
+
+void ShiftL(char S[], int pos, int n)
+{
+	int i;
+
+	for (i = pos; S[i] != '\0'; i++)
+	{
+		S[i - n] = S[i];
+	}
+	S[i - n] = S[i];
 }
 
 void PlaceStr(char S1[], char ch, int pos)
