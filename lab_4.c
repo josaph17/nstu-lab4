@@ -12,7 +12,7 @@ void PlaceStr(char S1[], char ch, int pos);
 
 int main()
 {
-    char S[N] = "a=b";
+    char S[N] = "!=b";
 	printf("%s\n", S);
 	ConvertToPascal(S);
 	printf("%s\n", S);
@@ -33,19 +33,27 @@ void ConvertToPascal(char S[])
 	int i;
 	for (i = 0; S[i] != '\0'; i++)
 	{
-		if (S[i] == 61 && S[i + 1] != 61) //код символа =
+		if (S[i] == 61 && S[i + 1] != 61) // =
 		{
 			ShiftR(S, i, 1);
-			PlaceStr(S, 58, i);
+			PlaceStr(S, 58, i); // :
 			return ;
 		}
 
-		else if (S[i] == 61 && S[i+1] == 61) //код символа =
+		else if (S[i] == 61 && S[i+1] == 61)  // ==
 		{
 			ShiftL(S, i+1, 1);
 			return;
 		}
+
+		else if (S[i] == 33 && S[i + 1] == 61) // !=
+		{
+			ShiftL(S, i+1, 1);
+			PlaceStr(S, 35, i); // #
+			return;
+		}
 	}
+	/*return -1;*/		//СПРОСИТЬ
 }
 
 void ShiftR(char S[], int pos, int n)
