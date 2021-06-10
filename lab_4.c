@@ -20,7 +20,7 @@ void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = " y!=78; htrer-= 54354, s-=6754";
+    char S[N] = "boo+= 54354, pm-=754, y!=78;, pm+= 789879, tyu==e";
 	printf("Programm on C:\n");
 	printf("%s\n", S);
 	ConvertToPascal(S);
@@ -40,21 +40,22 @@ int Length(char S[])
 
 void ConvertToPascal(char S[])
 {
-	int len = Length(S);
 	int i;
 
-	for (i = 0; S[i] != '\0' && i< len; i++)
+	for (i = 0; S[i] != '\0' && i< Length(S); i++)
 	{
 		if (S[i] == '=' && S[i + 1] != '=') 
 		{
 			ShiftR(S, i, 1);
 			PlaceStr(S, ':', i); 
 			i++;
+			printf("%s\n", S);
 		}
 
 		else if (S[i] == '=' && S[i+1] == '=')   
 		{
 			ShiftL(S, i+1, 1); //=
+			printf("%s\n", S);
 		}
 
 		else if (S[i] == '!' && S[i + 1] == '=')
@@ -62,6 +63,7 @@ void ConvertToPascal(char S[])
 			ShiftL(S, i+1, 1);
 			PlaceStr(S, '#', i); 	
 			i--;
+			printf("%s\n", S);
 		}
 
 		else if (S[i] == '+' && S[i + 1] == '=') 
@@ -73,6 +75,8 @@ void ConvertToPascal(char S[])
 			int LengthTemp = Length(Temp);
 			ShiftR(S, i+1, LengthTemp);
 			PlaceStr2(S, Temp, i+1);
+			printf("%s\n", S);
+			
 		}
 		else if (S[i] == '-' && S[i + 1] == '=') 
 		{
@@ -83,6 +87,7 @@ void ConvertToPascal(char S[])
 			int LengthTemp = Length(Temp);
 			ShiftR(S, i + 1, LengthTemp);
 			PlaceStr2(S, Temp, i + 1);
+			printf("%s\n", S);
 		}
 	}
 }
