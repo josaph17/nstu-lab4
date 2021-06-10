@@ -4,25 +4,30 @@
 #include <stdio.h>
 #define N 100
 
+char Letters[52] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+char Temp[N];
+
 int Length(char S[]);
-int Length2(char S[], char pos);
 void ConvertToPascal(char S[]);
 void ShiftL(char S[], int pos, int n);
 void ShiftR(char S[], int pos, int n);
-void ShiftR2(char S[], int pos, int n);
-void ShiftR3(char S[], int pos, int n);
-void ShiftR4(char S[], int pos, int n);
+int FindIndex1(char S[], int pos); //найти индекс конца 1 операнда
+int FindIndex2(char S[], int pos); //найти индекс конца 1 операнда
+void CreateTemp(char S[], int pos1, int pos2);
+void PlaceStr2(char S1[], char S2[], int pos);
+//void ShiftR3(char S[], int pos, int n);
+//void ShiftR4(char S[], int pos, int n);
 void PlaceStr(char S[], char ch, int pos);
 void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "vars+=54354";
+    char S[N] = " i=4; column!= 4, vars += 54354";
 	printf("Programm on C:\n");
 	printf("%s\n", S);
 	ConvertToPascal(S);
-	//printf("Programm on Pascal:\n");
-	//printf("%s\n", S);
+	printf("Programm on Pascal:\n");
+	printf("%s\n", S);
     return 0;
 }
 
@@ -42,35 +47,41 @@ void ConvertToPascal(char S[])
 
 	for (i = 0; S[i] != '\0' && i< len; i++)
 	{
-		if (S[i] == 61 && S[i + 1] != 61) // =
+		if (S[i] == '=' && S[i + 1] != '=') 
 		{
 			ShiftR(S, i, 1);
-			PlaceStr(S, 58, i); // :=
+			PlaceStr(S, ':', i); 
 			i++;
 		}
 
-		else if (S[i] == 61 && S[i+1] == 61)  // ==
+		else if (S[i] == '=' && S[i+1] == '=')   
 		{
 			ShiftL(S, i+1, 1); //=
 		}
 
-		else if (S[i] == 33 && S[i + 1] == 61) // !=
+		else if (S[i] == '!' && S[i + 1] == '=')
 		{
 			ShiftL(S, i+1, 1);
-			PlaceStr(S, 35, i); // #	
+			PlaceStr(S, '#', i); 	
 			i--;
 		}
 
-		else if (S[i] == 43 && S[i + 1] == 61) // +=
+		else if (S[i] == '+' && S[i + 1] == '=') 
 		{
+			int index2 = FindIndex2(S, i); /*найти индекс конца 1 операнда*/
+			//printf("Firs letter left from \"+\" is \"%c\", index2 number %d\n",  S[index2], index2);
+			int index1 = FindIndex1(S, index2);
+			//printf("Firs letter left from \"%c\" is \"%c\", index1 number %d\n", S[index2], S[index1], index1);
+			CreateTemp(S, index1, index2); //сформируем Temp
+			//printf("This is creating Temp \"%s\" \n", Temp);
 			ChangeMarks(S, i, i + 1);
-			printf("ChangeMarks %s\n", S);
-		/*	ShiftR3(S, i+1, i);
-			printf("ShiftR3 %s\n", S);*/
-			ShiftR4(S, i+1, i);
-			printf("ShiftR4 %s\n", S);
+			int LengthTemp = Length(Temp);
+			ShiftR(S, i+1, LengthTemp);
+			//printf("String after ShiftR \"%s\" \n", S);
+			PlaceStr2(S, Temp, i+1);
+			//printf("String after PlaceStr2 \"%s\"\n", S);
 		}
-		else if (S[i] == 45 && S[i + 1] == 61) // -=
+		else if (S[i] == '-' && S[i + 1] == '=') 
 		{
 			ChangeMarks(S, i, i + 1);
 			i + i;
@@ -89,48 +100,61 @@ void ShiftR(char S[], int pos, int n)
 	}
 }
 
-void ShiftR2(char S[], int pos, int n)
-{
-	int p = pos - 1;
-
-	for (; p >= 0; p--)
+int FindIndex2(char S[], int pos)	//найти индекс 1-й буквы слева от "+"
+{	
+	for (int i = pos; i >= 0; i--)
 	{
-		S[p + n] = S[p];
+		for (int j = 0; j < 54; j++)
+		{
+			if (S[i] == Letters[j])
+				return i;
+		}
 	}
 }
 
-void ShiftR3(char S[], int pos, int n) /*ShiftR3(S,i=5="+", i)*/
+int FindIndex1(char S[], int pos) // Найти индекс с которого начинается слово  левого операнда +=
 {
-	int p = pos+n-1;
-
-	for (p; p >=pos; p--)
+	for (int i = pos; i >= 0; i--)
 	{
-		S[p + n] = S[p];
+		if (S[i] == 32 || S[i] == ';' || S[i] == ',')
+			return i+1;
 	}
 }
 
-void ShiftR4(char S[], int pos, int n) /*ShiftR3(S,i=4="s", i=5)*/
+void CreateTemp(char S[], int pos1, int pos2)
 {
-	int len2 = Length2(S, pos); //6, 2-ой операнд и "+"
-	int p = len2 + pos-1 ;
-	int delta = p - len2;
-
-	for (; p >= pos; p--)
-	{
-		S[p + delta] = S[p];
-	}
+	int i=0, j = pos1, limit = pos2;
+	for (i, j; (i < N && j <= limit); i++, j++) //бежит по TEMP
+			Temp[i] = S[j];
+	Temp[i] = '\0';
+	return Temp;
 }
+//void ShiftR3(char S[], int pos, int n) /*Идет после ShiftR4, на входе 3 и 5*/
+//{
+//	//int p = pos;
+//
+//	int len2 = Length2(S, pos+1); //6, 2-ой операнд и "+"
+//	int p = len2 + pos;
+//	int delta = p - len2;
+//	p = pos;
+//	for (p; p >=pos-delta; p--)
+//	{
+//		S[p + n] = S[p];
+//	}
+//}
 
-int Length2(char S[], int pos)
-{
-	int i=pos;
+//void ShiftR4(char S[], int pos, int n) /*ShiftR3(S,i=4="s", i=5)*/
+//{
+//	int len2 = Length2(S, pos); //6, 2-ой операнд и "+"
+//	int p = len2 + pos-1 ;
+//	int delta = p - len2;
+//
+//	for (; p >= pos; p--)
+//	{
+//		S[p + delta] = S[p];
+//	}
+//}
 
-	for (; S[i] != '\0' && S[i] != 32; i++);
-
-	int p = i - pos;
-
-	return p;
-}
 
 void ShiftL(char S[], int pos, int n)
 {
@@ -148,6 +172,16 @@ void PlaceStr(char S[], char ch, int pos)
 	int j;
 
 	S[pos] = ch;
+}
+
+void PlaceStr2(char S1[], char S2[], int pos)
+{
+	int j;
+
+	for (j = 0; S2[j] != '\0'; j++)
+	{
+		S1[pos + j] = S2[j];
+	}
 }
  
 void ChangeMarks(char S[], int pos1, int pos2)
