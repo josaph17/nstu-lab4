@@ -65,7 +65,6 @@ void ConvertToPascal(char S[])
 		{
 			ShiftL(S, i+1, 1);
 			PlaceStr(S, '#', i); 	
-			i++;
 			//printf("%s\n", S);
 			len -= 1;
 		}
