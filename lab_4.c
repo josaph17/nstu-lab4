@@ -20,7 +20,7 @@ void ChangeMarks(char S[], int pos1, int pos2);
 
 int main()
 {
-    char S[N] = "b+=4 t==e s=d";
+    char S[N] = "   boo+= 54354, pm -= 754, y!=78;, pm+= 789879, tyu==9";
 	printf("Programm on C:\n");
 	printf("%s\n", S);
 	ConvertToPascal(S);
